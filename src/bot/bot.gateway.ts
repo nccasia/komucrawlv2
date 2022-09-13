@@ -1,12 +1,15 @@
 import {
   InjectDiscordClient,
+  InteractionEventCollector,
   On,
   Once,
+  UseCollectors,
   UseGuards,
   UsePipes,
 } from "@discord-nestjs/core";
 import { Injectable, Logger } from "@nestjs/common";
 import { Client, Message, MessageReaction, User } from "discord.js";
+import { AppreciatedReactionCollector } from "./collectors/appreciated-reaction-collector";
 import { ExtendersService } from "./extenders/extenders.service";
 // import { ExtendersService } from "./extenders/extenders.service";
 
@@ -17,6 +20,7 @@ import {
 import { MessageToUpperPipe } from "./pipes/message-to-upper.pipe";
 
 @Injectable()
+@InteractionEventCollector({ time: 15000 })
 export class BotGateway {
   private readonly logger = new Logger(BotGateway.name);
 
@@ -33,7 +37,8 @@ export class BotGateway {
 
   @On("messageCreate")
   @UseGuards(MessageFromUserGuard)
-  @UsePipes(MessageToUpperPipe)
+  // @UsePipes(MessageToUpperPipe)
+  @UseCollectors(AppreciatedReactionCollector)
   async onMessage(message: Message): Promise<void> {
     try {
       const displayname =
@@ -45,7 +50,9 @@ export class BotGateway {
         this.extendersService.addDBMessage(null, message).catch(console.error);
       }
       if (message.author != null) {
-        this.extendersService.addDBUser(displayname, message).catch(console.error);
+        this.extendersService
+          .addDBUser(displayname, message)
+          .catch(console.error);
       }
       // await message.reply(`${displayname}`);
     } catch (err) {
@@ -55,7 +62,7 @@ export class BotGateway {
 
   @On("messageDelete")
   @UseGuards(MessageFromUserGuard)
-  @UsePipes(MessageToUpperPipe)
+  // @UsePipes(MessageToUpperPipe)
   async onMessageDelete(message: Message): Promise<void> {
     try {
       this.extendersService.deleteDB(message);
@@ -66,28 +73,47 @@ export class BotGateway {
 
   @On("messageReactionAdd")
   @UseGuards(MessageReactionAddFromUserGuard)
-  @UsePipes(MessageToUpperPipe)
+  // @UsePipes(MessageToUpperPipe)
   async onMessageReactionAdd(
     messageReaction: MessageReaction,
     user: User
   ): Promise<void> {
     try {
-      console.log("message", messageReaction);
-      // const { message, emoji } = messageReaction;
-      // const chid = message.channel.id;
-      // const messageId = message.id;
-      // const guildId = message.guildId;
-      // const createdTimestamp = message.createdTimestamp;
-      // let channel = message.channel;
+      const { message, emoji } = messageReaction;
+      const chid = message.channel.id;
+      const messageId = message.id;
+      const guildId = message.guildId;
+      const createdTimestamp = message.createdTimestamp;
+      let channel = message.channel;
 
-      // console.log(message, "message");
-      // console.log(emoji, "emoji");
-      // console.log(chid);
-      // console.log(messageId);
-      // console.log(guildId);
-      // console.log(createdTimestamp);
+      if (!message.guildId) return;
 
-      // if (!message.guildId) return;
+      const fetchMessage = await message.client.channels.fetch(
+        message.channelId
+      );
+
+      console.log(message.client)
+      // const msg = await fetchMessage.messages.fetch(message.id);
+      // while (channel.type !== "GUILD_CATEGORY") {
+      //   channel = await message.client.channels.fetch(channel.parentId);
+      // }
+
+      // const checkCategories = [
+      //   "PROJECTS",
+      //   "PROJECTS-EXT",
+      //   "PRODUCTS",
+      //   "LOREN",
+      //   "HRM&IT",
+      //   "SAODO",
+      //   "MANAGEMENT",
+      // ];
+
+      // let validCategory;
+      // if (channel.name.slice(0, 4).toUpperCase() === "PRJ-") {
+      //   validCategory = true;
+      // } else {
+      //   validCategory = checkCategories.includes(channel.name.toUpperCase());
+      // }
     } catch (err) {
       console.log(err);
     }
