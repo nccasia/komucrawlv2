@@ -7,6 +7,8 @@ import * as Joi from "@hapi/joi";
 import { BotGateway } from "./bot/bot.gateway";
 import { ExtendersService } from "./bot/extenders/extenders.service";
 import { User } from "./bot/models/user.entity";
+import { Message } from "./bot/models/msg.entity";
+import { Mentioned } from "./bot/models/mentioned.entity";
 
 @Module({
   imports: [
@@ -35,7 +37,7 @@ import { User } from "./bot/models/user.entity";
         synchronize: true,
       }),
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Message, Mentioned]),
     DiscordModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({

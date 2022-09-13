@@ -4,6 +4,9 @@ import { TABLE } from "../constants/table";
 
 @Entity(TABLE.MSG)
 export class Message {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @Column({ type: "text", nullable: true })
   channelId: string;
 
@@ -14,10 +17,10 @@ export class Message {
   deleted: boolean;
 
   @Column({ nullable: true, unique: true })
-  id: string;
+  messageId: string;
 
-  @Column({ type: "date", nullable: true })
-  createdTimestamp: number;
+  @Column({ nullable: true })
+  createdTimestamp: string;
 
   @Column({ type: "text", nullable: true })
   type: string;
@@ -40,25 +43,25 @@ export class Message {
   @Column({ type: "text", nullable: true })
   nonce: string;
 
-  @Column({ type: "array", nullable: true })
+  @Column({ nullable: true })
   embeds: string;
 
-  @Column({ type: "array", nullable: true })
+  @Column({ nullable: true })
   components: string;
 
-  @Column({ type: "array", nullable: true })
+  @Column({ nullable: true })
   attachments: string;
 
-  @Column({ type: "array", nullable: true })
+  @Column({ nullable: true })
   stickers: string;
 
-  @Column({ nullable: false })
-  editedTimestamp: number;
+  @Column({ nullable: true })
+  editedTimestamp: string;
 
-  @Column({ type: "array", nullable: true })
+  @Column({ nullable: true })
   reactions: string;
 
-  @Column({ type: "array", nullable: true })
+  @Column({ nullable: true })
   mentions: string;
 
   @Column({ type: "text", nullable: true })

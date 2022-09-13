@@ -42,10 +42,10 @@ export class BotGateway {
           : message.author.username;
 
       if (message.id != null && message.content != "") {
-        this.extendersService.addDB(null, message).catch(console.error);
+        this.extendersService.addDBMessage(null, message).catch(console.error);
       }
       if (message.author != null) {
-        this.extendersService.addDB(displayname, message).catch(console.error);
+        this.extendersService.addDBUser(displayname, message).catch(console.error);
       }
       // await message.reply(`${displayname}`);
     } catch (err) {
