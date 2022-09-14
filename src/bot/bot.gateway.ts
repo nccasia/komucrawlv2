@@ -11,12 +11,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { Client, Message, MessageReaction, User } from "discord.js";
 import { AppreciatedReactionCollector } from "./collectors/appreciated-reaction-collector";
 import { ExtendersService } from "./extenders/extenders.service";
-// import { ExtendersService } from "./extenders/extenders.service";
-
-import {
-  MessageFromUserGuard,
-  MessageReactionAddFromUserGuard,
-} from "./guards/message-from-user.guard";
+import { MessageFromUserGuard } from "./guards/message-from-user.guard";
 import { MessageToUpperPipe } from "./pipes/message-to-upper.pipe";
 
 @Injectable()
@@ -72,7 +67,6 @@ export class BotGateway {
   }
 
   @On("messageReactionAdd")
-  @UseGuards(MessageReactionAddFromUserGuard)
   // @UsePipes(MessageToUpperPipe)
   async onMessageReactionAdd(
     messageReaction: MessageReaction,
@@ -92,8 +86,7 @@ export class BotGateway {
         message.channelId
       );
 
-      console.log(message.client)
-      // const msg = await fetchMessage.messages.fetch(message.id);
+      const msg = await (fetchMessage as any).messages.fetch(message.id);
       // while (channel.type !== "GUILD_CATEGORY") {
       //   channel = await message.client.channels.fetch(channel.parentId);
       // }
