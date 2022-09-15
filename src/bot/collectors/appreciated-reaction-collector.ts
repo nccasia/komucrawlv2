@@ -25,11 +25,11 @@ export class AppreciatedReactionCollector {
 
   @On('collect')
   onCollect(): void {
-    console.log('collect');
+    // console.log('collect');
   }
 
   @Once('end')
   onEnd(): void {
-    console.log('end');
+    // console.log('end');
   }
 }

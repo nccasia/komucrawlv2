@@ -6,9 +6,18 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import * as Joi from "@hapi/joi";
 import { BotGateway } from "./bot/bot.gateway";
 import { ExtendersService } from "./bot/extenders/extenders.service";
-import { User } from "./bot/models/user.entity";
-import { Message } from "./bot/models/msg.entity";
-import { Mentioned } from "./bot/models/mentioned.entity";
+import { User } from "./bot/entities/user.entity";
+import { Mentioned } from "./bot/entities/mentioned.entity";
+import { BwlService } from "./bot/bwl/bwl.service";
+import { UtilitiesService } from "./bot/utilities/utilities.service";
+import { Channel } from "./bot/entities/channel.entity";
+import { Bwl } from "./bot/entities/bwl.entity";
+import { BwlReaction } from "./bot/entities/bwlReaction.entity";
+import { MSG } from "./bot/entities/msg.entity";
+import { VoiceChannels } from "./bot/entities/voiceChannels.entity";
+import { JoinCall } from "./bot/entities/joinCall.entity";
+import { VoiceStateService } from "./bot/voice-state/voice-state.service";
+import { CheckCamera } from "./bot/entities/checkCamera.entity";
 
 @Module({
   imports: [
@@ -37,7 +46,17 @@ import { Mentioned } from "./bot/models/mentioned.entity";
         synchronize: true,
       }),
     }),
-    TypeOrmModule.forFeature([User, Message, Mentioned]),
+    TypeOrmModule.forFeature([
+      User,
+      MSG,
+      Mentioned,
+      Channel,
+      Bwl,
+      BwlReaction,
+      VoiceChannels,
+      JoinCall,
+      CheckCamera,
+    ]),
     DiscordModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -62,6 +81,12 @@ import { Mentioned } from "./bot/models/mentioned.entity";
       inject: [ConfigService],
     }),
   ],
-  providers: [BotGateway, ExtendersService],
+  providers: [
+    BotGateway,
+    ExtendersService,
+    BwlService,
+    UtilitiesService,
+    VoiceStateService,
+  ],
 })
 export class AppModule {}

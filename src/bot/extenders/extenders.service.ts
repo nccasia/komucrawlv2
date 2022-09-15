@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { User } from "../models/user.entity";
+import { User } from "../entities/user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Message } from "../models/msg.entity";
-import { Mentioned } from "../models/mentioned.entity";
-import { checkTime } from "../untils/formatDateTime";
+import { MSG } from "../entities/msg.entity";
+import { Mentioned } from "../entities/mentioned.entity";
+import { checkTime } from "../utilities/formatDateTime";
 import { InjectDiscordClient } from "@discord-nestjs/core";
 import { Client } from "discord.js";
 
@@ -13,8 +13,9 @@ export class ExtendersService {
   constructor(
     @InjectDiscordClient()
     private readonly client: Client,
-    @InjectRepository(User) private userRepository: Repository<User>,
-    @InjectRepository(Message) private messageRepository: Repository<Message>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    @InjectRepository(MSG) private msgRepository: Repository<MSG>,
     @InjectRepository(Mentioned)
     private mentionedRepository: Repository<Mentioned>
   ) {}
@@ -57,7 +58,9 @@ export class ExtendersService {
     await this.userRepository.insert(komuUser);
   }
 
-  async deleteDB(message?: any) {}
+  async deleteDB(message?: any) {
+    await this.mentionedRepository.delete({ messageId: message.id });
+  }
 
   async addDBMessage(_, message?: any) {
     const data = {
@@ -79,29 +82,29 @@ export class ExtendersService {
       flags: message.flags,
     };
 
-    await this.messageRepository.insert(data);
+    await this.msgRepository.insert(data);
 
     await this.userRepository
       .createQueryBuilder()
       .update(User)
       .set({ last_message_id: message.id })
-      .where("userId = :userId", { userId: message.author.id })
-      .andWhere(`deactive IS NOT true`)
-      .execute();
+      .where('"userId" = :userId', { userId: message.author.id })
+      .andWhere(`deactive IS NOT True`)
+      .execute()
+      .catch(console.error);
 
     await this.mentionedRepository
       .createQueryBuilder()
       .update(Mentioned)
       .set({ confirm: true, reactionTimestamp: "test" })
-      .where("channelId = :channelId", { channelId: message.channelId })
-      .andWhere("mentionUserId = :mentionUserId", {
+      .where(`"channelId" = :channelId`, { channelId: message.channelId })
+      .andWhere(`"mentionUserId" = :mentionUserId`, {
         mentionUserId: message.author.id,
       })
-      .andWhere("confirm = :confirm", { confirm: false })
-      .andWhere("reactionTimestamp = :reactionTimestamp", {
-        reactionTimestamp: null,
-      })
-      .execute();
+      .andWhere(`"confirm" = :confirm`, { confirm: false })
+      .andWhere(`"reactionTimestamp" IS NULL`)
+      .execute()
+      .catch(console.error);
 
     let channel = await message.client.channels.fetch(message.channelId);
 
@@ -129,7 +132,7 @@ export class ExtendersService {
       validCategory = checkCategories.includes(channel.name.toUpperCase());
     }
 
-    // if (!checkTime(new Date())) return;
+    if (!checkTime(new Date())) return;
 
     const clientRoleId = "1016915402347008010";
     const role = await message.guild.roles.fetch(clientRoleId);

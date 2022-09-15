@@ -8,11 +8,14 @@ import {
   UsePipes,
 } from "@discord-nestjs/core";
 import { Injectable, Logger } from "@nestjs/common";
-import { Client, Message, MessageReaction, User } from "discord.js";
+import { Client, Message, MessageReaction, User, VoiceState } from "discord.js";
+import { BwlService } from "./bwl/bwl.service";
 import { AppreciatedReactionCollector } from "./collectors/appreciated-reaction-collector";
 import { ExtendersService } from "./extenders/extenders.service";
 import { MessageFromUserGuard } from "./guards/message-from-user.guard";
 import { MessageToUpperPipe } from "./pipes/message-to-upper.pipe";
+import { UtilitiesService } from "./utilities/utilities.service";
+import { VoiceStateService } from "./voice-state/voice-state.service";
 
 @Injectable()
 @InteractionEventCollector({ time: 15000 })
@@ -22,7 +25,10 @@ export class BotGateway {
   constructor(
     @InjectDiscordClient()
     private readonly client: Client,
-    private readonly extendersService: ExtendersService
+    private readonly extendersService: ExtendersService,
+    private readonly utilitiesService: UtilitiesService,
+    private readonly voiceStateService: VoiceStateService,
+    private readonly bwlService: BwlService
   ) {}
 
   @Once("ready")
@@ -36,6 +42,7 @@ export class BotGateway {
   @UseCollectors(AppreciatedReactionCollector)
   async onMessage(message: Message): Promise<void> {
     try {
+      const { client: t } = message;
       const displayname =
         message.member != null || message.member != undefined
           ? message.member.displayName
@@ -49,7 +56,7 @@ export class BotGateway {
           .addDBUser(displayname, message)
           .catch(console.error);
       }
-      // await message.reply(`${displayname}`);
+      await this.bwlService.bwl(message, t).catch(console.error);
     } catch (err) {
       console.log(err);
     }
@@ -73,40 +80,20 @@ export class BotGateway {
     user: User
   ): Promise<void> {
     try {
-      const { message, emoji } = messageReaction;
-      const chid = message.channel.id;
-      const messageId = message.id;
-      const guildId = message.guildId;
-      const createdTimestamp = message.createdTimestamp;
-      let channel = message.channel;
+      this.utilitiesService.reactionDB(messageReaction, user);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-      if (!message.guildId) return;
-
-      const fetchMessage = await message.client.channels.fetch(
-        message.channelId
-      );
-
-      const msg = await (fetchMessage as any).messages.fetch(message.id);
-      // while (channel.type !== "GUILD_CATEGORY") {
-      //   channel = await message.client.channels.fetch(channel.parentId);
-      // }
-
-      // const checkCategories = [
-      //   "PROJECTS",
-      //   "PROJECTS-EXT",
-      //   "PRODUCTS",
-      //   "LOREN",
-      //   "HRM&IT",
-      //   "SAODO",
-      //   "MANAGEMENT",
-      // ];
-
-      // let validCategory;
-      // if (channel.name.slice(0, 4).toUpperCase() === "PRJ-") {
-      //   validCategory = true;
-      // } else {
-      //   validCategory = checkCategories.includes(channel.name.toUpperCase());
-      // }
+  @On("voiceStateUpdate")
+  // @UsePipes(MessageToUpperPipe)
+  async onVoiceStateUpdate(
+    oldState: VoiceState,
+    newState: VoiceState
+  ): Promise<void> {
+    try {
+      this.voiceStateService.voiceState(oldState, newState);
     } catch (err) {
       console.log(err);
     }
