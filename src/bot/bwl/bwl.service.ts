@@ -95,7 +95,7 @@ export class BwlService {
       } else {
         await this.channelRepository
           .insert({
-            id: chid,
+            channelId: chid,
             name: client.channels.cache.get(chid).name,
             type: client.channels.cache.get(chid).type,
             nsfw: client.channels.cache.get(chid).nsfw,
