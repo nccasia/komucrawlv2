@@ -19,8 +19,8 @@ export class MSG {
   @Column({ nullable: true, unique: true })
   messageId: string;
 
-  @Column({ nullable: true })
-  createdTimestamp: string;
+  @Column({ type: "decimal", nullable: true })
+  createdTimestamp: number;
 
   @Column({ type: "text", nullable: true })
   type: string;
@@ -55,8 +55,8 @@ export class MSG {
   @Column({ nullable: true })
   stickers: string;
 
-  @Column({ nullable: true })
-  editedTimestamp: string;
+  @Column({ type: "decimal", nullable: true })
+  editedTimestamp: number;
 
   @Column({ nullable: true })
   reactions: string;

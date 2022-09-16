@@ -34,7 +34,7 @@ export class VoiceStateService {
     await this.joinCallRepository
       .createQueryBuilder()
       .update(JoinCall)
-      .set({ status: status, end_time: "Date.now()" })
+      .set({ status: status, end_time: Date.now() })
       .where(`"channelId" = :channelId`, { channelId: channelId })
       .andWhere(`"userId" = :userId`, { userId: userId })
       .andWhere(`"status" = :status`, { status: status });
@@ -95,7 +95,7 @@ export class VoiceStateService {
       await this.joinCallRepository
         .createQueryBuilder()
         .update(JoinCall)
-        .set({ status: "finished", end_time: "Date.now()" })
+        .set({ status: "finished", end_time: Date.now() })
         .where('"userId" = :userId', {
           userId: newState.id,
         })

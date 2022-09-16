@@ -96,7 +96,7 @@ export class ExtendersService {
     await this.mentionedRepository
       .createQueryBuilder()
       .update(Mentioned)
-      .set({ confirm: true, reactionTimestamp: "test" })
+      .set({ confirm: true, reactionTimestamp: Date.now() })
       .where(`"channelId" = :channelId`, { channelId: message.channelId })
       .andWhere(`"mentionUserId" = :mentionUserId`, {
         mentionUserId: message.author.id,

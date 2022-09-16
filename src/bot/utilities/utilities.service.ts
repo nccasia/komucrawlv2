@@ -78,7 +78,7 @@ export class UtilitiesService {
         await this.mentionedRepository
           .createQueryBuilder()
           .update(Mentioned)
-          .set({ confirm: true, reactionTimestamp: "Date.now()" })
+          .set({ confirm: true, reactionTimestamp: Date.now() })
           .where(`"messageId" = :messageId`, { messageId: messageId })
           .where(`"mentionUserId" = :mentionUserId`, { mentionUserId: user.id })
           .where(`"reactionTimestamp" IS NULL`)

@@ -6,7 +6,7 @@ import { TABLE } from "../constants/table";
 export class Mentioned {
   @PrimaryGeneratedColumn()
   id: number;
-  
+
   @Column({ type: "text", nullable: true })
   messageId: string;
 
@@ -19,8 +19,8 @@ export class Mentioned {
   @Column({ type: "text", nullable: true })
   mentionUserId: string;
 
-  @Column({ nullable: true })
-  createdTimestamp: string;
+  @Column({ type: "decimal", nullable: true })
+  createdTimestamp: number;
 
   @Column({ type: "text", nullable: true })
   noti: boolean;
@@ -31,6 +31,6 @@ export class Mentioned {
   @Column({ type: "text", nullable: true })
   punish: boolean;
 
-  @Column({ default: null, nullable: true })
-  reactionTimestamp: string;
+  @Column({ type: "decimal", default: null, nullable: true })
+  reactionTimestamp: number;
 }
