@@ -58,7 +58,7 @@ export class User {
   @Column({ default: 0, nullable: true })
   scores_quiz: number;
 
-  @Column({ default: "dev", nullable: true })
+  @Column({ type: "text", array: true, nullable: true })
   roles: string;
 
   @Column({ default: false, nullable: true })
@@ -70,7 +70,7 @@ export class User {
   @Column({ default: false, nullable: true })
   deactive: boolean;
 
-  @Column({ default: "dev", nullable: true })
+  @Column({ type: "text", array: true, nullable: true })
   roles_discord: string;
 
   @Column({ default: false, nullable: true })
