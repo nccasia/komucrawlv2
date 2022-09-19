@@ -2,7 +2,7 @@ import { InjectDiscordClient } from "@discord-nestjs/core";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Client } from "discord.js";
-import downloader from "image-downloader";
+import * as downloader from "image-downloader";
 import { Repository } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 import { Bwl } from "../entities/bwl.entity";
@@ -77,7 +77,7 @@ export class BwlService {
             guildId: guildId,
             authorId: authorId,
             link: "links",
-            createTimestamp: "createdTimestamp",
+            createTimestamp: Date.now(),
           })
           .catch(console.error);
       }

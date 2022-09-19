@@ -37,7 +37,8 @@ export class VoiceStateService {
       .set({ status: status, end_time: Date.now() })
       .where(`"channelId" = :channelId`, { channelId: channelId })
       .andWhere(`"userId" = :userId`, { userId: userId })
-      .andWhere(`"status" = :status`, { status: status });
+      .execute();
+    // .andWhere(`"status" = :status`, { status: status });
   }
 
   async voiceState(oldState: VoiceState, newState: VoiceState) {
@@ -92,18 +93,18 @@ export class VoiceStateService {
       }
 
       // update user joining => finish when join new meeting
-      await this.joinCallRepository
-        .createQueryBuilder()
-        .update(JoinCall)
-        .set({ status: "finished", end_time: Date.now() })
-        .where('"userId" = :userId', {
-          userId: newState.id,
-        })
-        .andWhere('"status" = :status', {
-          status: "joining",
-        })
-        .execute()
-        .catch(console.error);
+      // await this.joinCallRepository
+      //   .createQueryBuilder()
+      //   .update(JoinCall)
+      //   .set({ status: "finished", end_time: Date.now() })
+      //   .where('"userId" = :userId', {
+      //     userId: newState.id,
+      //   })
+      //   .andWhere('"status" = :status', {
+      //     status: "joining",
+      //   })
+      //   .execute()
+      //   .catch(console.error);
 
       // !newState.channelId => leave room
       // !oldState.channelId => join room
@@ -112,6 +113,7 @@ export class VoiceStateService {
         await this.updateJoiningDb(oldState.channelId, oldState.id, "finish");
         const userid = oldState.channel.members.map((item) => item.user.id)[0];
         await this.updateJoiningDb(oldState.channelId, userid, "finish");
+        console.log(userid, "userid");
       }
       // one member joinning hence total member = 2
       if (countMember === 2 && !oldState.channelId) {
@@ -121,6 +123,7 @@ export class VoiceStateService {
       }
       if (countMember === 2 && !newState.channelId) {
         await this.updateJoiningDb(oldState.channelId, oldState.id, "finish");
+        console.log(oldState.id, "oldState.id");
       }
       if (countMember > 2) {
         if (!oldState.channelId) {

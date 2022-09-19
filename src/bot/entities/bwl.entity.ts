@@ -22,5 +22,5 @@ export class Bwl {
   link: string;
 
   @Column({ type: "decimal", nullable: true })
-  createTimestamp: string;
+  createTimestamp: number;
 }
