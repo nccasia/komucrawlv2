@@ -1,11 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 import { TABLE } from "../constants/table";
 
 @Entity(TABLE.MSG)
 export class MSG {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  messageId: string;
 
   @Column({ type: "text", nullable: true })
   channelId: string;
@@ -15,9 +15,6 @@ export class MSG {
 
   @Column({ nullable: true })
   deleted: boolean;
-
-  @Column({ nullable: true, unique: true })
-  messageId: string;
 
   @Column({ type: "decimal", nullable: true })
   createdTimestamp: number;

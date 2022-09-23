@@ -3,13 +3,13 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Client } from "discord.js";
 import * as downloader from "image-downloader";
+import { join } from "path";
 import { Repository } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 import { Bwl } from "../entities/bwl.entity";
 import { Channel } from "../entities/channel.entity";
 
-const mediaPath = "../media/attachments/";
-
+const mediaPath = join(__dirname, "../../..", "src/media/attachments/");
 @Injectable()
 export class BwlService {
   constructor(
@@ -35,7 +35,6 @@ export class BwlService {
       const chid = message.channelId;
       const messageId = message.id;
       const guildId = message.guildId;
-      const createdTimestamp = message.createdTimestamp;
 
       const authorId = message.author.id;
 
@@ -43,7 +42,6 @@ export class BwlService {
       message.embeds.forEach((embed) => {
         try {
           if (embed.type == "image") {
-            console.log("downloading " + embed.url);
             const filename = uuidv4() + "_" + embed.url.split("/").pop();
             this.download_image(embed.url, filename);
             links.push(filename);
@@ -91,7 +89,7 @@ export class BwlService {
           .createQueryBuilder()
           .update(Channel)
           .set({ lastMessageId: client.channels.cache.get(chid).lastMessageId })
-          .where(`"id" = :id`, { id: chid });
+          .where(`"channelId" = :channelId`, { channelId: chid });
       } else {
         await this.channelRepository
           .insert({

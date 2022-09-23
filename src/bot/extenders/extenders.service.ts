@@ -64,10 +64,10 @@ export class ExtendersService {
 
   async addDBMessage(_, message?: any) {
     const data = {
+      messageId: message.id,
       channelId: message.channelId,
       guildId: message.guildId,
       deleted: message.deleted,
-      messageId: message.id,
       createdTimestamp: message.createdTimestamp,
       type: message.type,
       system: message.system,
