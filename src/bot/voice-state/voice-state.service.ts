@@ -64,7 +64,7 @@ export class VoiceStateService {
             .update(VoiceChannels)
             .set({ status: "happening" })
             .where('"voiceChannelId" = :voiceChannelId', {
-              voiceChannelId: item.id,
+              voiceChannelId: item.voiceChannelId,
             })
             .execute()
             .catch(console.error);
@@ -84,7 +84,7 @@ export class VoiceStateService {
             .update(VoiceChannels)
             .set({ status: "finished" })
             .where('"voiceChannelId" = :voiceChannelId', {
-              voiceChannelId: item.id,
+              voiceChannelId: item.voiceChannelId,
             })
             .execute()
             .catch(console.error);

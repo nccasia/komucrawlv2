@@ -13,7 +13,7 @@ import { UtilitiesService } from "./bot/utilities/utilities.service";
 import { Channel } from "./bot/entities/channel.entity";
 import { Bwl } from "./bot/entities/bwl.entity";
 import { BwlReaction } from "./bot/entities/bwlReaction.entity";
-import { MSG } from "./bot/entities/msg.entity";
+import { Msg } from "./bot/entities/msg.entity";
 import { VoiceChannels } from "./bot/entities/voiceChannels.entity";
 import { JoinCall } from "./bot/entities/joinCall.entity";
 import { VoiceStateService } from "./bot/voice-state/voice-state.service";
@@ -48,7 +48,7 @@ import { CheckCamera } from "./bot/entities/checkCamera.entity";
     }),
     TypeOrmModule.forFeature([
       User,
-      MSG,
+      Msg,
       Mentioned,
       Channel,
       Bwl,

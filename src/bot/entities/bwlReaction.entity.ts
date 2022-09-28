@@ -23,4 +23,7 @@ export class BwlReaction {
 
   @Column()
   count: number;
+
+  @Column({ type: "decimal" })
+  createTimestamp: number;
 }

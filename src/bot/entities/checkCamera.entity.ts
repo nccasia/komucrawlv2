@@ -7,10 +7,10 @@ export class CheckCamera {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   userId: string;
 
-  @Column()
+  @Column({ nullable: true })
   channelId: string;
 
   @Column()

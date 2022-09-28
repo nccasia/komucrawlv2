@@ -31,6 +31,6 @@ export class Mentioned {
   @Column({ type: "text", nullable: true })
   punish: boolean;
 
-  @Column({ type: "decimal", default: null, nullable: true })
+  @Column({ type: "decimal", default: null })
   reactionTimestamp: number;
 }

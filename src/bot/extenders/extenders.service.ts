@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { User } from "../entities/user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { MSG } from "../entities/msg.entity";
+import { Msg } from "../entities/msg.entity";
 import { Mentioned } from "../entities/mentioned.entity";
 import { checkTime } from "../utilities/formatDateTime";
 import { InjectDiscordClient } from "@discord-nestjs/core";
@@ -15,7 +15,7 @@ export class ExtendersService {
     private readonly client: Client,
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    @InjectRepository(MSG) private msgRepository: Repository<MSG>,
+    @InjectRepository(Msg) private msgRepository: Repository<Msg>,
     @InjectRepository(Mentioned)
     private mentionedRepository: Repository<Mentioned>
   ) {}
@@ -63,8 +63,10 @@ export class ExtendersService {
   }
 
   async addDBMessage(_, message?: any) {
+    const user = await this.userRepository.find(message.author.id);
     const data = {
-      messageId: message.id,
+      id: message.id,
+      // user: user,
       channelId: message.channelId,
       guildId: message.guildId,
       deleted: message.deleted,
@@ -122,7 +124,6 @@ export class ExtendersService {
       "HRM&IT",
       "SAODO",
       "MANAGEMENT",
-      "MOVE CHANNEL",
     ];
 
     let validCategory: boolean = false;

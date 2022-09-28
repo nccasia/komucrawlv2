@@ -1,84 +1,96 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 import { TABLE } from "../constants/table";
+import { User } from "./user.entity";
 
 @Entity(TABLE.MSG)
-export class MSG {
+export class Msg {
   @PrimaryColumn()
-  messageId: string;
+  id: number;
 
-  @Column({ type: "text", nullable: true })
+  // @ManyToOne(() => User, (state) => state.msg)
+  // @JoinTable({ name: "user" })
+  // user: User[];
+
+  @Column({ type: "text" })
   channelId: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "text" })
   guildId: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "boolean" })
   deleted: boolean;
 
   @Column({ type: "decimal", nullable: true })
   createdTimestamp: number;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "text" })
   type: string;
 
-  @Column({ nullable: true })
+  @Column({ type: "boolean" })
   system: boolean;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "text" })
   content: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "text" })
   author: string;
 
-  @Column({ nullable: true })
+  @Column({ type: "boolean" })
   pinned: boolean;
 
-  @Column({ nullable: true })
+  @Column({ type: "boolean" })
   tts: boolean;
 
   @Column({ type: "text", nullable: true })
   nonce: string;
 
-  @Column({ nullable: true })
-  embeds: string;
+  @Column("text", { array: true, nullable: true })
+  embeds: string[];
 
-  @Column({ nullable: true })
-  components: string;
+  @Column("text", { array: true, nullable: true })
+  components: string[];
 
-  @Column({ nullable: true })
-  attachments: string;
+  @Column("text", { array: true, nullable: true })
+  attachments: string[];
 
-  @Column({ nullable: true })
-  stickers: string;
+  @Column("text", { array: true, nullable: true })
+  stickers: string[];
 
   @Column({ type: "decimal", nullable: true })
   editedTimestamp: number;
 
-  @Column({ nullable: true })
-  reactions: string;
+  @Column("text", { array: true, nullable: true })
+  reactions: string[];
 
-  @Column({ nullable: true })
-  mentions: string;
+  @Column("text", { array: true, nullable: true })
+  mentions: string[];
 
-  @Column({ type: "text", nullable: true })
+  @Column({ nullable: true, type: "text" })
   webhookId: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ nullable: true, type: "text" })
   groupActivityApplication: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ nullable: true, type: "text" })
   applicationId: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ nullable: true, type: "text" })
   activity: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "decimal" })
   flags: number;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ nullable: true, type: "text" })
   reference: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ nullable: true, type: "text" })
   interaction: string;
 }

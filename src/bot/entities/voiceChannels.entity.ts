@@ -10,18 +10,18 @@ export class VoiceChannels {
   @Column({ nullable: true })
   voiceChannelId: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "text" })
   originalName: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "text" })
   newRoomName: string;
 
-  @Column({ nullable: true, default: 0 })
+  @Column({ nullable: true, type: "decimal" })
   people: number;
 
-  @Column()
+  @Column({ nullable: true, type: "text", default: "start" })
   status: string;
 
-  @Column({ type: "decimal", nullable: true })
+  @Column({ type: "decimal" })
   createdTimestamp: number;
 }

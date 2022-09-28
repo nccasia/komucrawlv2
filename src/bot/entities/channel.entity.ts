@@ -7,24 +7,24 @@ export class Channel {
   @PrimaryColumn()
   channelId: string;
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   name: string;
 
-  @Column({ nullable: true })
+  @Column({ type: "text", nullable: true })
   type: string;
 
-  @Column()
+  @Column({ type: "boolean" })
   nsfw: boolean;
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   rawPosition: number;
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   lastMessageId: string;
 
-  @Column()
+  @Column({ type: "decimal", nullable: true })
   rateLimitPerUser: number;
 
-  @Column()
+  @Column({ type: "text", nullable: true })
   parentId: string;
 }
