@@ -13,7 +13,7 @@ import { User } from "./user.entity";
 @Entity(TABLE.MSG)
 export class Msg {
   @PrimaryColumn()
-  id: number;
+  id: string;
 
   // @ManyToOne(() => User, (state) => state.msg)
   // @JoinTable({ name: "user" })

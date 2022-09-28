@@ -12,7 +12,10 @@ import { Msg } from "./msg.entity";
 
 @Entity(TABLE.USER)
 export class User {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ type: "text", nullable: true })
   userId: string;
 
   @Column({ type: "text", nullable: true })
