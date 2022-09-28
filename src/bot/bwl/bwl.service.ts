@@ -74,8 +74,8 @@ export class BwlService {
             messageId: messageId,
             guildId: guildId,
             authorId: authorId,
-            link: "links",
-            createTimestamp: Date.now(),
+            link: links,
+            createdTimestamp: Date.now(),
           })
           .catch(console.error);
       }

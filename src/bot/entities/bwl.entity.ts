@@ -1,16 +1,18 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { TABLE } from "../constants/table";
+import { BwlReaction } from "./bwlReaction.entity";
 
 @Entity(TABLE.BWL)
 export class Bwl {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  messageId: string;
+
+  @OneToMany(() => BwlReaction, (state) => state.bwl)
+  @JoinTable()
+  bwlReact: BwlReaction[];
 
   @Column({ type: "text", nullable: true })
   channelId: string;
-
-  @Column({ type: "text", nullable: true })
-  messageId: string;
 
   @Column({ type: "text", nullable: true })
   guildId: string;
@@ -18,9 +20,9 @@ export class Bwl {
   @Column({ type: "text", nullable: true })
   authorId: string;
 
-  @Column({ type: "text", nullable: true })
-  link: string;
+  @Column("text", { array: true, nullable: true })
+  link: string[];
 
   @Column({ type: "decimal", nullable: true })
-  createTimestamp: number;
+  createdTimestamp: number;
 }

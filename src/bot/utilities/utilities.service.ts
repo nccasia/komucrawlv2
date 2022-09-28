@@ -5,6 +5,7 @@ import { Client } from "discord.js";
 import { BwlReaction } from "src/bot/entities/bwlReaction.entity";
 import { Mentioned } from "src/bot/entities/mentioned.entity";
 import { Repository } from "typeorm";
+import { Bwl } from "../entities/bwl.entity";
 
 @Injectable()
 export class UtilitiesService {
@@ -14,7 +15,9 @@ export class UtilitiesService {
     @InjectRepository(Mentioned)
     private mentionedRepository: Repository<Mentioned>,
     @InjectRepository(BwlReaction)
-    private bwlReactionRepository: Repository<BwlReaction>
+    private bwlReactionRepository: Repository<BwlReaction>,
+    @InjectRepository(Bwl)
+    private bwlRepository: Repository<Bwl>
   ) {}
 
   async reactionDB(messageReaction: any, user: any) {
@@ -104,17 +107,24 @@ export class UtilitiesService {
         return;
       }
 
-      const createBwl = {
+      const bwl = await this.bwlRepository.findOne({
+        where: {
+          messageId: messageId,
+        },
+      });
+      await this.bwlReactionRepository.insert({
         channelId: chid,
         guildId: guildId,
         messageId: messageId,
         authorId: user.id,
         emoji: emoji.name,
+        bwl: bwl,
         count: 1,
         createdTimestamp: createdTimestamp,
-      };
-
-      await this.bwlReactionRepository.insert(createBwl);
+      });
     } catch (error) {}
   }
 }
+
+// select * from public."komu_bwlReaction"
+// left join komu_bwl on komu_bwl."messageId" = "komu_bwlReaction"."bwlMessageId"

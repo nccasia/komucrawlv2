@@ -1,8 +1,10 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToOne,
+  OneToOne,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -15,9 +17,9 @@ export class Msg {
   @PrimaryColumn()
   id: string;
 
-  // @ManyToOne(() => User, (state) => state.msg)
-  // @JoinTable({ name: "user" })
-  // user: User[];
+  @OneToOne(() => User, (state) => state.msg)
+  @JoinTable({ name: "user" })
+  user: User;
 
   @Column({ type: "text" })
   channelId: string;

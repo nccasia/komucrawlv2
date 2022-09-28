@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   OneToMany,
   PrimaryColumn,
@@ -21,9 +22,9 @@ export class User {
   @Column({ type: "text", nullable: true })
   username: string;
 
-  // @OneToMany(() => Msg, (state) => state.user)
-  // @JoinTable()
-  // msg: Msg[];
+  @OneToMany(() => Msg, (state) => state.user)
+  @JoinTable()
+  msg: Msg[];
 
   // @OneToMany(() => WorkFromHome, (state) => state.userid)
   // wfh: WorkFromHome;

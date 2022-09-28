@@ -1,10 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { TABLE } from "../constants/table";
+import { Bwl } from "./bwl.entity";
 
 @Entity(TABLE.BWLREACTION)
 export class BwlReaction {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ManyToOne(() => Bwl, (state) => state.bwlReact)
+  @JoinTable({ name: "bwl" })
+  bwl: Bwl;
 
   @Column({ type: "text", nullable: true })
   channelId: string;
@@ -25,5 +30,5 @@ export class BwlReaction {
   count: number;
 
   @Column({ type: "decimal" })
-  createTimestamp: number;
+  createdTimestamp: number;
 }

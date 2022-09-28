@@ -63,10 +63,14 @@ export class ExtendersService {
   }
 
   async addDBMessage(_, message?: any) {
-    const user = await this.userRepository.find(message.author.id);
+    const user = await this.userRepository.findOne({
+      where: {
+        userId: message.author.id,
+      },
+    });
     const data = {
       id: message.id,
-      // user: user,
+      user: user,
       channelId: message.channelId,
       guildId: message.guildId,
       deleted: message.deleted,
