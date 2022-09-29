@@ -1,27 +1,36 @@
-import { Column, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { TABLE } from "../constants/table";
 import { Bwl } from "./bwl.entity";
+import { Channel } from "./channel.entity";
+import { User } from "./user.entity";
 
 @Entity(TABLE.BWLREACTION)
 export class BwlReaction {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Bwl, (state) => state.bwlReact)
-  @JoinTable({ name: "bwl" })
-  bwl: Bwl;
+  @ManyToOne(() => Bwl)
+  @JoinColumn({ name: "messageId" })
+  messageId: Bwl;
 
-  @Column({ type: "text", nullable: true })
-  channelId: string;
-
-  @Column({ type: "text", nullable: true })
-  messageId: string;
+  @OneToOne(() => Channel)
+  @JoinColumn({ name: "channelId" })
+  channelId: Channel;
 
   @Column({ type: "text", nullable: true })
   guildId: string;
 
-  @Column({ type: "text", nullable: true })
-  authorId: string;
+  @OneToOne(() => User)
+  @JoinColumn({ name: "authorId" })
+  authorId: User;
 
   @Column({ nullable: true })
   emoji: string;

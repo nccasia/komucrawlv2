@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 
 import { TABLE } from "../constants/table";
+import { Channel } from "./channel.entity";
 import { User } from "./user.entity";
 
 @Entity(TABLE.MSG)
@@ -17,12 +18,13 @@ export class Msg {
   @PrimaryColumn()
   id: string;
 
-  @OneToOne(() => User, (state) => state.msg)
-  @JoinTable({ name: "user" })
-  user: User;
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "author" })
+  author: User;
 
-  @Column({ type: "text" })
-  channelId: string;
+  @OneToOne(() => Channel)
+  @JoinColumn({ name: "channelId" })
+  channelId: Channel;
 
   @Column({ type: "text" })
   guildId: string;
@@ -41,9 +43,6 @@ export class Msg {
 
   @Column({ type: "text" })
   content: string;
-
-  @Column({ type: "text" })
-  author: string;
 
   @Column({ type: "boolean" })
   pinned: boolean;

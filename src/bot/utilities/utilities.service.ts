@@ -6,6 +6,8 @@ import { BwlReaction } from "src/bot/entities/bwlReaction.entity";
 import { Mentioned } from "src/bot/entities/mentioned.entity";
 import { Repository } from "typeorm";
 import { Bwl } from "../entities/bwl.entity";
+import { Channel } from "../entities/channel.entity";
+import { User } from "../entities/user.entity";
 
 @Injectable()
 export class UtilitiesService {
@@ -17,7 +19,11 @@ export class UtilitiesService {
     @InjectRepository(BwlReaction)
     private bwlReactionRepository: Repository<BwlReaction>,
     @InjectRepository(Bwl)
-    private bwlRepository: Repository<Bwl>
+    private bwlRepository: Repository<Bwl>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    @InjectRepository(Channel)
+    private channelRepository: Repository<Channel>
   ) {}
 
   async reactionDB(messageReaction: any, user: any) {
@@ -89,14 +95,18 @@ export class UtilitiesService {
       }
 
       const dataBwl = await this.bwlReactionRepository.findOne({
+        relations: ["authorId", "channelId", "messageId"],
         where: {
-          authorId: user.id,
-          messageId: messageId,
           guildId: guildId,
-          channelId: chid,
+          authorId: {
+            userId: user.id,
+          },
+          messageId: { messageId: messageId },
+          channelId: { id: chid },
         },
       });
 
+      console.log(dataBwl);
       if (dataBwl != null) {
         await this.bwlReactionRepository
           .createQueryBuilder()
@@ -112,19 +122,26 @@ export class UtilitiesService {
           messageId: messageId,
         },
       });
+      const userInsert = await this.userRepository.findOne({
+        where: {
+          userId: user.id,
+        },
+      });
+      const channelInsert = await this.channelRepository.findOne({
+        where: {
+          id: chid,
+        },
+      });
+
       await this.bwlReactionRepository.insert({
-        channelId: chid,
+        channelId: channelInsert,
         guildId: guildId,
-        messageId: messageId,
-        authorId: user.id,
+        messageId: bwl,
+        authorId: userInsert,
         emoji: emoji.name,
-        bwl: bwl,
         count: 1,
         createdTimestamp: createdTimestamp,
       });
     } catch (error) {}
   }
 }
-
-// select * from public."komu_bwlReaction"
-// left join komu_bwl on komu_bwl."messageId" = "komu_bwlReaction"."bwlMessageId"

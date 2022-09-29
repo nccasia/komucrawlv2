@@ -7,6 +7,7 @@ import { Mentioned } from "../entities/mentioned.entity";
 import { checkTime } from "../utilities/formatDateTime";
 import { InjectDiscordClient } from "@discord-nestjs/core";
 import { Client } from "discord.js";
+import { Channel } from "../entities/channel.entity";
 
 @Injectable()
 export class ExtendersService {
@@ -15,6 +16,8 @@ export class ExtendersService {
     private readonly client: Client,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Channel)
+    private channelRepository: Repository<Channel>,
     @InjectRepository(Msg) private msgRepository: Repository<Msg>,
     @InjectRepository(Mentioned)
     private mentionedRepository: Repository<Mentioned>
@@ -68,17 +71,21 @@ export class ExtendersService {
         userId: message.author.id,
       },
     });
+    const channelInsert = await this.channelRepository.findOne({
+      where: {
+        id: message.channelId,
+      },
+    });
     const data = {
       id: message.id,
-      user: user,
-      channelId: message.channelId,
+      channelId: channelInsert,
       guildId: message.guildId,
       deleted: message.deleted,
       createdTimestamp: message.createdTimestamp,
       type: message.type,
       system: message.system,
       content: message.content,
-      author: message.author.id,
+      author: user,
       pinned: message.pinned,
       tts: message.tts,
       nonce: message.nonce,

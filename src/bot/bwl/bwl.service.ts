@@ -8,6 +8,7 @@ import { Repository } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 import { Bwl } from "../entities/bwl.entity";
 import { Channel } from "../entities/channel.entity";
+import { User } from "../entities/user.entity";
 
 const mediaPath = join(__dirname, "../../..", "src/media/attachments/");
 @Injectable()
@@ -17,6 +18,8 @@ export class BwlService {
     private readonly client: Client,
     @InjectRepository(Bwl)
     private bwlRepository: Repository<Bwl>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
     @InjectRepository(Channel)
     private channelRepository: Repository<Channel>
   ) {}
@@ -68,12 +71,22 @@ export class BwlService {
       });
 
       if (links.length > 0) {
+        const user = await this.userRepository.findOne({
+          where: {
+            userId: authorId,
+          },
+        });
+        const channel = await this.channelRepository.findOne({
+          where: {
+            id: chid,
+          },
+        });
         await this.bwlRepository
           .insert({
-            channelId: chid,
+            channelId: channel,
             messageId: messageId,
             guildId: guildId,
-            authorId: authorId,
+            authorId: user,
             link: links,
             createdTimestamp: Date.now(),
           })
@@ -81,7 +94,7 @@ export class BwlService {
       }
 
       const datachk = await this.channelRepository
-        .findOne({ where: { channelId: chid } })
+        .findOne({ where: { id: chid } })
         .catch(console.error);
 
       if (datachk) {
@@ -93,7 +106,7 @@ export class BwlService {
       } else {
         await this.channelRepository
           .insert({
-            channelId: chid,
+            id: chid,
             name: client.channels.cache.get(chid).name,
             type: client.channels.cache.get(chid).type,
             nsfw: client.channels.cache.get(chid).nsfw,

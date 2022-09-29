@@ -9,22 +9,29 @@ import {
 } from "typeorm";
 
 import { TABLE } from "../constants/table";
+import { Bwl } from "./bwl.entity";
+import { BwlReaction } from "./bwlReaction.entity";
 import { Msg } from "./msg.entity";
 
 @Entity(TABLE.USER)
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ type: "text", nullable: true })
+  @PrimaryColumn()
   userId: string;
 
   @Column({ type: "text", nullable: true })
   username: string;
 
-  @OneToMany(() => Msg, (state) => state.user)
-  @JoinTable()
-  msg: Msg[];
+  // @OneToMany(() => Msg, (state) => state.author)
+  // @JoinColumn()
+  // msg: Msg[];
+
+  // @OneToMany(() => Bwl, (state) => state.authorId)
+  // @JoinColumn()
+  // bwl: Bwl[];
+
+  // @OneToMany(() => BwlReaction, (state) => state.authorId)
+  // @JoinColumn()
+  // bwlReact: BwlReaction[];
 
   // @OneToMany(() => WorkFromHome, (state) => state.userid)
   // wfh: WorkFromHome;

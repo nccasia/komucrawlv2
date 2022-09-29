@@ -1,24 +1,28 @@
-import { Column, Entity, JoinTable, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { TABLE } from "../constants/table";
 import { BwlReaction } from "./bwlReaction.entity";
+import { Channel } from "./channel.entity";
+import { User } from "./user.entity";
 
 @Entity(TABLE.BWL)
 export class Bwl {
   @PrimaryColumn()
   messageId: string;
 
-  @OneToMany(() => BwlReaction, (state) => state.bwl)
-  @JoinTable()
-  bwlReact: BwlReaction[];
+  // @OneToMany(() => BwlReaction, (state) => state.messageId)
+  // @JoinColumn()
+  // bwlReact: BwlReaction[];
 
-  @Column({ type: "text", nullable: true })
-  channelId: string;
+  @ManyToOne(() => Channel)
+  @JoinColumn({ name: "channelId" })
+  channelId: Channel;
 
   @Column({ type: "text", nullable: true })
   guildId: string;
 
-  @Column({ type: "text", nullable: true })
-  authorId: string;
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "authorId" })
+  authorId: User;
 
   @Column("text", { array: true, nullable: true })
   link: string[];

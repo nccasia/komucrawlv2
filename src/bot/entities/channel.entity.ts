@@ -1,11 +1,26 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, OneToMany, PrimaryColumn } from "typeorm";
 
 import { TABLE } from "../constants/table";
+import { Bwl } from "./bwl.entity";
+import { BwlReaction } from "./bwlReaction.entity";
+import { Msg } from "./msg.entity";
 
 @Entity(TABLE.CHANNEL)
 export class Channel {
   @PrimaryColumn()
-  channelId: string;
+  id: string;
+
+  // @OneToMany(() => Bwl, (state) => state.channelId)
+  // @JoinColumn()
+  // bwl: Bwl[];
+
+  // @OneToMany(() => BwlReaction, (state) => state.channelId)
+  // @JoinColumn()
+  // bwlReaction: BwlReaction[];
+
+  // @OneToMany(() => Msg, (state) => state.channelId)
+  // @JoinColumn()
+  // msg: Msg[];
 
   @Column({ type: "text", nullable: true })
   name: string;
