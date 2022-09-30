@@ -22,7 +22,7 @@ export class Msg {
   @JoinColumn({ name: "author" })
   author: User;
 
-  @OneToOne(() => Channel)
+  @ManyToOne(() => Channel)
   @JoinColumn({ name: "channelId" })
   channelId: Channel;
 
