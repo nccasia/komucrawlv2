@@ -95,18 +95,17 @@ export class UtilitiesService {
       }
 
       const dataBwl = await this.bwlReactionRepository.findOne({
-        relations: ["authorId", "channelId", "messageId"],
+        relations: ["messageId", "authorId", "channelId"],
         where: {
           guildId: guildId,
+          messageId: messageId,
           authorId: {
             userId: user.id,
           },
-          messageId: { messageId: messageId },
           channelId: { id: chid },
         },
       });
 
-      console.log(dataBwl);
       if (dataBwl != null) {
         await this.bwlReactionRepository
           .createQueryBuilder()
@@ -118,6 +117,7 @@ export class UtilitiesService {
       }
 
       const bwl = await this.bwlRepository.findOne({
+        relations: ["channelId", "authorId"],
         where: {
           messageId: messageId,
         },

@@ -21,14 +21,14 @@ export class BwlReaction {
   @JoinColumn({ name: "messageId" })
   messageId: Bwl;
 
-  @OneToOne(() => Channel)
+  @ManyToOne(() => Channel)
   @JoinColumn({ name: "channelId" })
   channelId: Channel;
 
   @Column({ type: "text", nullable: true })
   guildId: string;
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User)
   @JoinColumn({ name: "authorId" })
   authorId: User;
 
