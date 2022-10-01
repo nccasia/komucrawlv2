@@ -83,10 +83,10 @@ export class BwlService {
         });
         await this.bwlRepository
           .insert({
-            channelId: channel,
+            channel: channel,
             messageId: messageId,
             guildId: guildId,
-            authorId: user,
+            author: user,
             link: links,
             createdTimestamp: Date.now(),
           })

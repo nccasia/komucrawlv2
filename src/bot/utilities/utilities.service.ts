@@ -93,16 +93,34 @@ export class UtilitiesService {
           .where(`"reactionTimestamp" IS NULL`)
           .execute();
       }
+      console.log(
+        await this.bwlReactionRepository.findOne({
+          relations: ["bwl", "author", "channel"],
+          where: {
+            guildId: guildId,
+            bwl: {
+              messageId: messageId,
+            },
+            author: {
+              userId: user.id,
+            },
+            channel: { id: chid },
+          },
+        })
+      );
 
       const dataBwl = await this.bwlReactionRepository.findOne({
-        relations: ["messageId", "authorId", "channelId"],
+        relations: ["bwl", "author", "channel"],
         where: {
           guildId: guildId,
-          messageId: messageId,
-          authorId: {
+          // bwl: messageId,
+          bwl: {
+            messageId: messageId,
+          },
+          author: {
             userId: user.id,
           },
-          channelId: { id: chid },
+          channel: { id: chid },
         },
       });
 
@@ -117,7 +135,6 @@ export class UtilitiesService {
       }
 
       const bwl = await this.bwlRepository.findOne({
-        relations: ["channelId", "authorId"],
         where: {
           messageId: messageId,
         },
@@ -134,10 +151,10 @@ export class UtilitiesService {
       });
 
       await this.bwlReactionRepository.insert({
-        channelId: channelInsert,
+        channel: channelInsert,
         guildId: guildId,
-        messageId: bwl,
-        authorId: userInsert,
+        bwl: bwl,
+        author: userInsert,
         emoji: emoji.name,
         count: 1,
         createdTimestamp: createdTimestamp,

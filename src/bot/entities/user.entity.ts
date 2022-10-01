@@ -21,17 +21,14 @@ export class User {
   @Column({ type: "text", nullable: true })
   username: string;
 
-  // @OneToMany(() => Msg, (state) => state.author)
-  // @JoinColumn()
-  // msg: Msg[];
+  @OneToMany(() => Msg, (state) => state.author)
+  msg: Msg[];
 
-  // @OneToMany(() => Bwl, (state) => state.authorId)
-  // @JoinColumn()
-  // bwl: Bwl[];
+  @OneToMany(() => Bwl, (state) => state.author)
+  bwl: Bwl[];
 
-  // @OneToMany(() => BwlReaction, (state) => state.authorId)
-  // @JoinColumn()
-  // bwlReact: BwlReaction[];
+  @OneToMany(() => BwlReaction, (state) => state.author)
+  bwlReaction: BwlReaction[];
 
   // @OneToMany(() => WorkFromHome, (state) => state.userid)
   // wfh: WorkFromHome;

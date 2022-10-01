@@ -18,13 +18,13 @@ export class Msg {
   @PrimaryColumn()
   id: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (state) => state.msg)
   @JoinColumn({ name: "author" })
   author: User;
 
-  @ManyToOne(() => Channel)
-  @JoinColumn({ name: "channelId" })
-  channelId: Channel;
+  @ManyToOne(() => Channel, (state) => state.msg)
+  @JoinColumn({ name: "channel" })
+  channel: Channel;
 
   @Column({ type: "text" })
   guildId: string;

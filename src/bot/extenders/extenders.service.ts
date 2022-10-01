@@ -78,7 +78,7 @@ export class ExtendersService {
     });
     const data = {
       id: message.id,
-      channelId: channelInsert,
+      channel: channelInsert,
       guildId: message.guildId,
       deleted: message.deleted,
       createdTimestamp: message.createdTimestamp,
