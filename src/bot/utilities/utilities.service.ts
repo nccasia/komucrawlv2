@@ -1,7 +1,7 @@
 import { InjectDiscordClient } from "@discord-nestjs/core";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Client } from "discord.js";
+import { Client, MessageReaction, User as UserDiscord } from "discord.js";
 import { BwlReaction } from "src/bot/entities/bwlReaction.entity";
 import { Mentioned } from "src/bot/entities/mentioned.entity";
 import { Repository } from "typeorm";
@@ -26,7 +26,7 @@ export class UtilitiesService {
     private channelRepository: Repository<Channel>
   ) {}
 
-  async reactionDB(messageReaction: any, user: any) {
+  async reactionDB(messageReaction: MessageReaction, user: UserDiscord) {
     try {
       const { message, emoji } = messageReaction;
       const chid = message.channel.id;
@@ -109,30 +109,30 @@ export class UtilitiesService {
         })
       );
 
-      const dataBwl = await this.bwlReactionRepository.findOne({
-        relations: ["bwl", "author", "channel"],
-        where: {
-          guildId: guildId,
-          // bwl: messageId,
-          bwl: {
-            messageId: messageId,
-          },
-          author: {
-            userId: user.id,
-          },
-          channel: { id: chid },
-        },
-      });
+      // const dataBwl = await this.bwlReactionRepository.findOne({
+      //   relations: ["bwl", "author", "channel"],
+      //   where: {
+      //     guildId: guildId,
+      //     // bwl: messageId,
+      //     bwl: {
+      //       messageId: messageId,
+      //     },
+      //     author: {
+      //       userId: user.id,
+      //     },
+      //     channel: { id: chid },
+      //   },
+      // });
 
-      if (dataBwl != null) {
-        await this.bwlReactionRepository
-          .createQueryBuilder()
-          .update(BwlReaction)
-          .set({ count: dataBwl.count + 1 })
-          .where("id = :id", { id: dataBwl.id })
-          .execute();
-        return;
-      }
+      // if (dataBwl != null) {
+      //   await this.bwlReactionRepository
+      //     .createQueryBuilder()
+      //     .update(BwlReaction)
+      //     .set({ count: dataBwl.count + 1 })
+      //     .where("id = :id", { id: dataBwl.id })
+      //     .execute();
+      //   return;
+      // }
 
       const bwl = await this.bwlRepository.findOne({
         where: {
@@ -159,6 +159,23 @@ export class UtilitiesService {
         count: 1,
         createdTimestamp: createdTimestamp,
       });
+    } catch (error) {}
+  }
+
+  async reactionRemoveDB(messageReaction: MessageReaction, user: UserDiscord) {
+    try {
+      const { message, emoji } = messageReaction;
+      const chid = message.channel.id;
+      const messageId = message.id;
+
+      return await this.bwlReactionRepository
+        .createQueryBuilder()
+        .delete()
+        .from(BwlReaction)
+        .where("emoji = :emoji", { emoji: emoji.name })
+        .andWhere("channelId = :channelId", { channelId: chid })
+        .andWhere("bwlId = :bwlId", { bwlId: messageId })
+        .execute();
     } catch (error) {}
   }
 }

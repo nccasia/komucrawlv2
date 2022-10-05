@@ -98,4 +98,17 @@ export class BotGateway {
       console.log(err);
     }
   }
+
+  @On("messageReactionRemove")
+  // @UsePipes(MessageToUpperPipe)
+  async onMessageReactionRemove(
+    messageReaction: MessageReaction,
+    user: User
+  ): Promise<void> {
+    try {
+      this.utilitiesService.reactionRemoveDB(messageReaction, user);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }

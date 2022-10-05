@@ -18,6 +18,8 @@ import { VoiceChannels } from "./bot/entities/voiceChannels.entity";
 import { JoinCall } from "./bot/entities/joinCall.entity";
 import { VoiceStateService } from "./bot/voice-state/voice-state.service";
 import { CheckCamera } from "./bot/entities/checkCamera.entity";
+import { WorkFromHome } from "./bot/entities/wfh.entity";
+import { TX8 } from "./bot/entities/tx8.entity";
 
 @Module({
   imports: [
@@ -56,6 +58,8 @@ import { CheckCamera } from "./bot/entities/checkCamera.entity";
       VoiceChannels,
       JoinCall,
       CheckCamera,
+      WorkFromHome,
+      TX8,
     ]),
     DiscordModule.forRootAsync({
       imports: [ConfigModule],

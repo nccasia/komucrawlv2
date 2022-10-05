@@ -12,6 +12,8 @@ import { TABLE } from "../constants/table";
 import { Bwl } from "./bwl.entity";
 import { BwlReaction } from "./bwlReaction.entity";
 import { Msg } from "./msg.entity";
+import { TX8 } from "./tx8.entity";
+import { WorkFromHome } from "./wfh.entity";
 
 @Entity(TABLE.USER)
 export class User {
@@ -30,8 +32,11 @@ export class User {
   @OneToMany(() => BwlReaction, (state) => state.author)
   bwlReaction: BwlReaction[];
 
-  // @OneToMany(() => WorkFromHome, (state) => state.userid)
-  // wfh: WorkFromHome;
+  @OneToMany(() => TX8, (state) => state.user)
+  tx8: TX8[];
+
+  @OneToMany(() => WorkFromHome, (state) => state.user)
+  wfh: WorkFromHome[];
 
   @Column({ type: "text", nullable: true })
   discriminator: string;
