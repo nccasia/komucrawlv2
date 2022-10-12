@@ -135,7 +135,6 @@ export class ExtendersService {
       "HRM&IT",
       "SAODO",
       "MANAGEMENT",
-      "MOVE CHANNEL"
     ];
 
     let validCategory: boolean = false;
@@ -145,9 +144,9 @@ export class ExtendersService {
       validCategory = checkCategories.includes(channel.name.toUpperCase());
     }
 
-    // if (!checkTime(new Date())) return;
+    if (!checkTime(new Date())) return;
 
-    const clientRoleId = "1016915402347008010";
+    const clientRoleId = "921797855373574185";
     const role = await message.guild.roles.fetch(clientRoleId);
     let includeClient: boolean = false;
     if (role) {

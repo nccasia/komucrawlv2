@@ -56,7 +56,6 @@ export class UtilitiesService {
         "HRM&IT",
         "SAODO",
         "MANAGEMENT",
-        "MOVE CHANNEL",
       ];
 
       let validCategory;
