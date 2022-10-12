@@ -93,21 +93,6 @@ export class UtilitiesService {
           .where(`"reactionTimestamp" IS NULL`)
           .execute();
       }
-      console.log(
-        await this.bwlReactionRepository.findOne({
-          relations: ["bwl", "author", "channel"],
-          where: {
-            guildId: guildId,
-            bwl: {
-              messageId: messageId,
-            },
-            author: {
-              userId: user.id,
-            },
-            channel: { id: chid },
-          },
-        })
-      );
 
       // const dataBwl = await this.bwlReactionRepository.findOne({
       //   relations: ["bwl", "author", "channel"],

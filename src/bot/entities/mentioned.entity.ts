@@ -22,13 +22,13 @@ export class Mentioned {
   @Column({ type: "decimal", nullable: true })
   createdTimestamp: number;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ nullable: true })
   noti: boolean;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ nullable: true })
   confirm: boolean;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ nullable: true })
   punish: boolean;
 
   @Column({ type: "decimal", default: null })

@@ -31,7 +31,7 @@ export class Msg {
   @OneToMany(() => TX8, (state) => state.message)
   tx8: TX8[];
 
-  @Column({ type: "text" })
+  @Column({ nullable: true, type: "text" })
   guildId: string;
 
   @Column({ nullable: true, type: "boolean" })
