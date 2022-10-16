@@ -7,7 +7,7 @@ export const TABLE = {
   BWL: "komu_bwl",
   CHANNEL: "komu_channel",
   JOIN_CALL: "komu_joinCall",
-  VOICECHANNELS: "komu_voiceChannels",
+  VOICECHANNELS: "komu_voicechannels",
   CHECK_CAMERA: "komu_checkCamera",
   TX8: "komu_tx8",
   WFH: "komu_wfh",
