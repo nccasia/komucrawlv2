@@ -22,6 +22,6 @@ export class VoiceChannels {
   @Column({ nullable: true, type: "text", default: "start" })
   status: string;
 
-  @Column({ type: "decimal" })
+  @Column({ type: "decimal", nullable: true })
   createdTimestamp: number;
 }

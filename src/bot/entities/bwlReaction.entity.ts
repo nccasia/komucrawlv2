@@ -35,9 +35,9 @@ export class BwlReaction {
   @Column({ nullable: true })
   emoji: string;
 
-  @Column()
+  @Column({ nullable: true })
   count: number;
 
-  @Column({ type: "decimal" })
+  @Column({ type: "decimal", nullable: true })
   createdTimestamp: number;
 }

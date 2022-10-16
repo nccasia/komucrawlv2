@@ -20,19 +20,19 @@ export class WorkFromHome {
   @JoinColumn({ name: "userId" })
   user: User;
 
-  @Column({ type: "text" })
+  @Column({ type: "text", nullable: true })
   wfhMsg: string;
 
-  @Column({ type: "decimal" })
+  @Column({ type: "decimal", nullable: true })
   createdAt: number;
 
-  @Column({ type: "boolean" })
+  @Column({ type: "boolean", nullable: true })
   complain: boolean;
 
-  @Column({ type: "boolean" })
+  @Column({ type: "boolean", nullable: true })
   pmconfirm: boolean;
 
-  @Column({ type: "text" })
+  @Column({ type: "text", nullable: true })
   status: string;
 
   @Column({ type: "text", nullable: true })

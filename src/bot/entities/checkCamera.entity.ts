@@ -13,9 +13,9 @@ export class CheckCamera {
   @Column({ nullable: true })
   channelId: string;
 
-  @Column()
+  @Column({ nullable: true })
   enableCamera: boolean;
 
-  @Column({ type: "decimal" })
+  @Column({ type: "decimal", nullable: true })
   createdTimestamp: number;
 }
