@@ -42,7 +42,7 @@ export class UtilitiesService {
       );
 
       const msg = await (fetchMessage as any).messages.fetch(message.id);
-      if ((channel as any).type !== "GUILD_CATEGORY") {
+      if ((channel as any).type !== 4) {
         (channel as any) = await message.client.channels.fetch(
           (channel as any).parentId
         );

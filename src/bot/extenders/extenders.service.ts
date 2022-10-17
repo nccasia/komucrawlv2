@@ -121,9 +121,9 @@ export class ExtendersService {
 
     let channel = await message.client.channels.fetch(message.channelId);
 
-    if (channel.type === "DM") return data;
+    if (channel.type === 1) return data;
 
-    if (channel.type !== "GUILD_CATEGORY") {
+    if (channel.type !== 4) {
       channel = await message.client.channels.fetch(channel.parentId);
     }
 
