@@ -83,6 +83,7 @@ export class UtilitiesService {
       );
 
       if (resolveMention) {
+        console.log(user.id, "user.id")
         await this.mentionedRepository
           .createQueryBuilder()
           .update(Mentioned)
