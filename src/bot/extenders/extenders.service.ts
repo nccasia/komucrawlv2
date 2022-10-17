@@ -6,7 +6,7 @@ import { Msg } from "../entities/msg.entity";
 import { Mentioned } from "../entities/mentioned.entity";
 import { checkTime } from "../utilities/formatDateTime";
 import { InjectDiscordClient } from "@discord-nestjs/core";
-import { Client } from "discord.js";
+import { ChannelType, Client } from "discord.js";
 import { Channel } from "../entities/channel.entity";
 
 @Injectable()
@@ -137,9 +137,9 @@ export class ExtendersService {
 
     let channel = await message.client.channels.fetch(message.channelId);
 
-    if (channel.type === 1) return data;
+    if (channel.type === ChannelType.DM) return data;
 
-    if (channel.type !== 4) {
+    if (channel.type !== ChannelType.GuildCategory) {
       channel = await message.client.channels.fetch(channel.parentId);
     }
 

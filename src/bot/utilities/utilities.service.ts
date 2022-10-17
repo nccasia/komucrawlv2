@@ -1,7 +1,7 @@
 import { InjectDiscordClient } from "@discord-nestjs/core";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Client, MessageReaction, User as UserDiscord } from "discord.js";
+import { ChannelType, Client, MessageReaction, User as UserDiscord } from "discord.js";
 import { BwlReaction } from "src/bot/entities/bwlReaction.entity";
 import { Mentioned } from "src/bot/entities/mentioned.entity";
 import { Repository } from "typeorm";
@@ -42,7 +42,7 @@ export class UtilitiesService {
       );
 
       const msg = await (fetchMessage as any).messages.fetch(message.id);
-      if ((channel as any).type !== 4) {
+      if ((channel as any).type !== ChannelType.GuildCategory) {
         (channel as any) = await message.client.channels.fetch(
           (channel as any).parentId
         );
@@ -83,7 +83,7 @@ export class UtilitiesService {
       );
 
       if (resolveMention) {
-        console.log(user.id, "user.id")
+        console.log(user.id, "user.id");
         await this.mentionedRepository
           .createQueryBuilder()
           .update(Mentioned)
