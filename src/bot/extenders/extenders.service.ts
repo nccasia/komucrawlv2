@@ -6,7 +6,7 @@ import { Msg } from "../entities/msg.entity";
 import { Mentioned } from "../entities/mentioned.entity";
 import { checkTime } from "../utilities/formatDateTime";
 import { InjectDiscordClient } from "@discord-nestjs/core";
-import { ChannelType, Client } from "discord.js";
+import { ChannelType, Client, MessageType } from "discord.js";
 import { Channel } from "../entities/channel.entity";
 
 @Injectable()
@@ -66,6 +66,7 @@ export class ExtendersService {
   }
 
   async addDBMessage(_, message?: any) {
+    console.log(message.type)
     const user = await this.userRepository.findOne({
       where: {
         userId: message.author.id,
@@ -163,7 +164,7 @@ export class ExtendersService {
       validCategory &&
       !includeClient &&
       message.channelId !== "921339190090797106" &&
-      message.type !== "REPLY"
+      message.type !== MessageType.Reply
     ) {
       const uniqueUsers = message.mentions.users.reduce((prev, current) => {
         const exists = prev.find((user) => user.id === current.id);
