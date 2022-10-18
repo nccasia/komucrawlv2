@@ -83,14 +83,13 @@ export class UtilitiesService {
       );
 
       if (resolveMention) {
-        console.log(user.id, "user.id");
         await this.mentionedRepository
           .createQueryBuilder()
           .update(Mentioned)
           .set({ confirm: true, reactionTimestamp: Date.now() })
           .where(`"messageId" = :messageId`, { messageId: messageId })
-          .where(`"mentionUserId" = :mentionUserId`, { mentionUserId: user.id })
-          .where(`"reactionTimestamp" IS NULL`)
+          .andWhere(`"mentionUserId" = :mentionUserId`, { mentionUserId: user.id })
+          .andWhere(`"reactionTimestamp" IS NULL`)
           .execute();
       }
 

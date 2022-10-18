@@ -106,22 +106,6 @@ export class ExtendersService {
       .execute()
       .catch(console.error);
 
-    console.log(
-      await this.mentionedRepository
-        .createQueryBuilder()
-        .update(Mentioned)
-        .set({ confirm: true, reactionTimestamp: Date.now() })
-        .where(`"channelId" = :channelId`, { channelId: message.channelId })
-        .andWhere(`"mentionUserId" = :mentionUserId`, {
-          mentionUserId: message.author.id,
-        })
-        .andWhere(`"confirm" = :confirm`, { confirm: false })
-        .andWhere(`"reactionTimestamp" IS NULL`)
-        .execute()
-        .catch(console.error),
-      "update",
-      message.author.id
-    );
     await this.mentionedRepository
       .createQueryBuilder()
       .update(Mentioned)
