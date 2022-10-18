@@ -66,7 +66,6 @@ export class ExtendersService {
   }
 
   async addDBMessage(_, message?: any) {
-    console.log(message.type)
     const user = await this.userRepository.findOne({
       where: {
         userId: message.author.id,
