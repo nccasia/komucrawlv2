@@ -123,7 +123,12 @@ export class ExtendersService {
 
     if (channel.type === ChannelType.DM) return data;
 
-    if (channel.type !== ChannelType.GuildCategory) {
+    if (channel.type === ChannelType.GuildPublicThread) {
+      const channelParent = await message.client.channels.fetch(
+        channel.parentId
+      );
+      channel = await message.client.channels.fetch(channelParent.parentId);
+    } else if (channel.type === ChannelType.GuildText) {
       channel = await message.client.channels.fetch(channel.parentId);
     }
 
