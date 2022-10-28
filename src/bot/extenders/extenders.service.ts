@@ -123,7 +123,10 @@ export class ExtendersService {
 
     if (channel.type === ChannelType.DM) return data;
 
-    if (channel.type === ChannelType.GuildPublicThread) {
+    if (
+      channel.type === ChannelType.GuildPublicThread ||
+      ChannelType.GuildPrivateThread
+    ) {
       const channelParent = await message.client.channels.fetch(
         channel.parentId
       );
@@ -192,7 +195,10 @@ export class ExtendersService {
             message.channelId
           );
 
-          if (getChannels.type === ChannelType.GuildPublicThread) {
+          if (
+            getChannels.type === ChannelType.GuildPublicThread ||
+            ChannelType.GuildPrivateThread
+          ) {
             getChannels = await message.client.channels.fetch(
               getChannels.parentId
             );
