@@ -1,7 +1,12 @@
 import { InjectDiscordClient } from "@discord-nestjs/core";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ChannelType, Client, MessageReaction, User as UserDiscord } from "discord.js";
+import {
+  ChannelType,
+  Client,
+  MessageReaction,
+  User as UserDiscord,
+} from "discord.js";
 import { BwlReaction } from "src/bot/entities/bwlReaction.entity";
 import { Mentioned } from "src/bot/entities/mentioned.entity";
 import { Repository } from "typeorm";
@@ -42,10 +47,23 @@ export class UtilitiesService {
       );
 
       const msg = await (fetchMessage as any).messages.fetch(message.id);
-      if ((channel as any).type !== ChannelType.GuildCategory) {
-        (channel as any) = await message.client.channels.fetch(
-          (channel as any).parentId
+      // if ((channel as any).type !== ChannelType.GuildCategory) {
+      //   (channel as any) = await message.client.channels.fetch(
+      //     (channel as any).parentId
+      //   );
+      // }
+
+      if (channel.type === ChannelType.GuildPublicThread) {
+        const channelParent = await message.client.channels.fetch(
+          channel.parentId
         );
+        channel = (await message.client.channels.fetch(
+          (channelParent as any).parentId
+        )) as any;
+      } else if (channel.type === ChannelType.GuildText) {
+        channel = (await message.client.channels.fetch(
+          channel.parentId
+        )) as any;
       }
 
       const checkCategories = [
@@ -88,7 +106,9 @@ export class UtilitiesService {
           .update(Mentioned)
           .set({ confirm: true, reactionTimestamp: Date.now() })
           .where(`"messageId" = :messageId`, { messageId: messageId })
-          .andWhere(`"mentionUserId" = :mentionUserId`, { mentionUserId: user.id })
+          .andWhere(`"mentionUserId" = :mentionUserId`, {
+            mentionUserId: user.id,
+          })
           .andWhere(`"reactionTimestamp" IS NULL`)
           .execute();
       }
