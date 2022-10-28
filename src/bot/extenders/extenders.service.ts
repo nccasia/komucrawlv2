@@ -188,9 +188,16 @@ export class ExtendersService {
             tagClient = role.members.some((member) => member.id === user.id);
           }
 
-          const getChannels = await message.guild.channels.fetch(
+          let getChannels = await message.client.channels.fetch(
             message.channelId
           );
+
+          if (getChannels.type === ChannelType.GuildPublicThread) {
+            getChannels = await message.client.channels.fetch(
+              getChannels.parentId
+            );
+          }
+
           let includeChannel = false;
           if (getChannels && getChannels.members && getChannels.members.some) {
             includeChannel = getChannels.members.some(
