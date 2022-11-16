@@ -56,6 +56,7 @@ export class ExtendersService {
       flags: message.author.flags,
       premium_type: message.author.premium_type,
       public_flags: message.author.public_flags,
+      createdAt: Date.now(),
     };
 
     await this.userRepository.insert(komuUser);
@@ -123,7 +124,10 @@ export class ExtendersService {
 
     if (channel.type === ChannelType.DM) return data;
 
-    if (channel.type === ChannelType.GuildPublicThread) {
+    if (
+      channel.type === ChannelType.GuildPublicThread ||
+      channel.type === ChannelType.GuildPrivateThread
+    ) {
       const channelParent = await message.client.channels.fetch(
         channel.parentId
       );
@@ -192,7 +196,10 @@ export class ExtendersService {
             message.channelId
           );
 
-          if (getChannels.type === ChannelType.GuildPublicThread) {
+          if (
+            getChannels.type === ChannelType.GuildPublicThread ||
+            getChannels.type === ChannelType.GuildPrivateThread
+          ) {
             getChannels = await message.client.channels.fetch(
               getChannels.parentId
             );

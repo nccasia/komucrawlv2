@@ -53,7 +53,10 @@ export class UtilitiesService {
       //   );
       // }
 
-      if (channel.type === ChannelType.GuildPublicThread) {
+      if (
+        channel.type === ChannelType.GuildPublicThread ||
+        channel.type === ChannelType.GuildPrivateThread
+      ) {
         const channelParent = await message.client.channels.fetch(
           channel.parentId
         );
