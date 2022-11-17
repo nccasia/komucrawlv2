@@ -51,64 +51,41 @@ export class VoiceStateService {
         : oldState.channel.members;
 
       if (countMember === 2 && newState.channelId) {
-        const checkJoinMeeting = await this.voiceChannelsRepository.find({
-          where: {
+        await this.voiceChannelsRepository
+          .createQueryBuilder()
+          .update(VoiceChannels)
+          .set({ status: "happening" })
+          .where({
             status: "start",
             voiceChannelId: newState.channelId,
-          },
-        });
-
-        checkJoinMeeting.map(async (item) => {
-          await this.voiceChannelsRepository
-            .createQueryBuilder()
-            .update(VoiceChannels)
-            .set({ status: "happening" })
-            .where('"voiceChannelId" = :voiceChannelId', {
-              voiceChannelId: item.voiceChannelId,
-            })
-            .execute()
-            .catch(console.error);
-        });
+          })
+          .execute()
+          .catch(console.error);
       }
 
+      console.log('countMember', countMember)
       if (countMember < 2 && !newState.channelId) {
-        const checkEndMeeting = await this.voiceChannelsRepository.find({
+        const checkEndMeeting = await this.voiceChannelsRepository.findOne({
           where: {
             status: "happening",
             voiceChannelId: oldState.channelId,
           },
         });
-        checkEndMeeting.map(async (item) => {
-          await this.voiceChannelsRepository
-            .createQueryBuilder()
-            .update(VoiceChannels)
-            .set({ status: "finished" })
-            .where('"voiceChannelId" = :voiceChannelId', {
-              voiceChannelId: item.voiceChannelId,
-            })
-            .execute()
-            .catch(console.error);
-          await oldState.channel.setName(`${item.originalName}`);
-        });
+        console.log('checkEndMeeting', checkEndMeeting.status)
+        console.log('checkEndMeeting', checkEndMeeting.originalName)
+        await this.voiceChannelsRepository
+          .createQueryBuilder()
+          .update(VoiceChannels)
+          .set({ status: "finished" })
+          .where({
+            status: "happening",
+            voiceChannelId: oldState.channelId,
+          })
+          .execute()
+          .catch(console.error);
+        await oldState.channel.setName(`${checkEndMeeting.originalName}`);
       }
 
-      // update user joining => finish when join new meeting
-      // await this.joinCallRepository
-      //   .createQueryBuilder()
-      //   .update(JoinCall)
-      //   .set({ status: "finished", end_time: Date.now() })
-      //   .where('"userId" = :userId', {
-      //     userId: newState.id,
-      //   })
-      //   .andWhere('"status" = :status', {
-      //     status: "joining",
-      //   })
-      //   .execute()
-      //   .catch(console.error);
-
-      // !newState.channelId => leave room
-      // !oldState.channelId => join room
-      // one member leave when totals member = 2
       if (countMember === 1 && !newState.channelId) {
         await this.updateJoiningDb(oldState.channelId, oldState.id, "finish");
         const userid = oldState.channel.members.map((item) => item.user.id)[0];
@@ -146,7 +123,7 @@ export class VoiceStateService {
           .catch(console.error);
       }
     } catch (err) {
-      console.log(err);
+      console.log('voiceState()', err);
     }
   }
 }
