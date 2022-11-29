@@ -7,7 +7,7 @@ export class VoiceChannels {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "text" })
   voiceChannelId: string;
 
   @Column({ nullable: true, type: "text" })
