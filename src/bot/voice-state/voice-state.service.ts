@@ -63,27 +63,33 @@ export class VoiceStateService {
           .catch(console.error);
       }
 
-      console.log('countMember', countMember)
+      console.log("countMember", countMember);
       if (countMember < 2 && !newState.channelId) {
-        const checkEndMeeting = await this.voiceChannelsRepository.findOne({
-          where: {
-            status: "happening",
-            voiceChannelId: oldState.channelId,
-          },
-        });
-        console.log('checkEndMeeting', checkEndMeeting.status)
-        console.log('checkEndMeeting', checkEndMeeting.originalName)
-        await this.voiceChannelsRepository
-          .createQueryBuilder()
-          .update(VoiceChannels)
-          .set({ status: "finished" })
-          .where({
-            status: "happening",
-            voiceChannelId: oldState.channelId,
-          })
-          .execute()
-          .catch(console.error);
-        await oldState.channel.setName(`${checkEndMeeting.originalName}`);
+        try {
+          const checkEndMeeting = await this.voiceChannelsRepository.findOne({
+            where: {
+              status: "happening",
+              voiceChannelId: oldState.channelId,
+            },
+          });
+          if (checkEndMeeting) {
+            console.log("checkEndMeeting", checkEndMeeting?.status);
+            console.log("checkEndMeeting", checkEndMeeting?.originalName);
+            await this.voiceChannelsRepository
+              .createQueryBuilder()
+              .update(VoiceChannels)
+              .set({ status: "finished" })
+              .where({
+                status: "happening",
+                voiceChannelId: oldState.channelId,
+              })
+              .execute()
+              .catch(console.error);
+            await oldState.channel.setName(`${checkEndMeeting?.originalName}`);
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
 
       if (countMember === 1 && !newState.channelId) {
@@ -123,7 +129,7 @@ export class VoiceStateService {
           .catch(console.error);
       }
     } catch (err) {
-      console.log('voiceState()', err);
+      console.log("voiceState()", err);
     }
   }
 }
