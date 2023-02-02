@@ -131,7 +131,11 @@ export class ExtendersService {
       const channelParent = await message.client.channels.fetch(
         channel.parentId
       );
-      channel = await message.client.channels.fetch(channelParent.parentId);
+      if (channelParent && channelParent.parentId) {
+        channel = await message.client.channels.fetch(channelParent.parentId);
+      } else {
+        return;
+      }
     } else if (channel.type === ChannelType.GuildText) {
       channel = await message.client.channels.fetch(channel.parentId);
     }

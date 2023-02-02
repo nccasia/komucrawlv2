@@ -94,9 +94,11 @@ export class UtilitiesService {
         msg.author.id != "922003239887581205"
       ) {
         const userDiscord = await message.client.users.fetch(msg.author.id);
-        userDiscord.send(
-          `${user.username} react ${emoji.name} on your comment ${message.url}`
-        );
+        userDiscord
+          .send(
+            `${user.username} react ${emoji.name} on your comment ${message.url}`
+          )
+          .catch((err) => console.log(err));
       }
 
       const resolveMention = message.mentions.users.find(
