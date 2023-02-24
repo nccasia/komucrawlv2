@@ -48,7 +48,7 @@ export class BotGateway {
           ? message.member.displayName
           : message.author.username;
 
-      if (message.id != null && message.content != "") {
+      if (message.id != null) {
         this.extendersService.addDBMessage(null, message).catch(console.error);
       }
       if (message.author != null) {
