@@ -19,14 +19,14 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@discord-nestjs/core": "*",
+    "@discord-nestjs/core": "^5.3.5",
     "@hapi/joi": "^17.1.1",
     "@nestjs/common": "9.0.7",
     "@nestjs/config": "2.2.0",
     "@nestjs/core": "9.0.7",
     "@nestjs/mapped-types": "*",
     "@nestjs/typeorm": "^9.0.1",
-    "discord.js": "14.1.1",
+    "discord.js": "^14.8.0",
     "image-downloader": "^4.3.0",
     "pg": "^8.8.0",
     "reflect-metadata": "0.1.13",
