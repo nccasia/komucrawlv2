@@ -176,7 +176,8 @@ export class ExtendersService {
       validCategory &&
       !includeClient &&
       message.channelId !== "921339190090797106" &&
-      message.type !== MessageType.Reply
+      message.type !== MessageType.Reply &&
+      message.type !== MessageType.RecipientRemove
     ) {
       const uniqueUsers = message.mentions.users.reduce((prev, current) => {
         const exists = prev.find((user) => user.id === current.id);
