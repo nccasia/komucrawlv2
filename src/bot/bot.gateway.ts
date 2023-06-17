@@ -52,7 +52,6 @@ export class BotGateway {
           .addDBUser(displayname, message)
           .catch(console.error);
       }
-      await this.bwlService.bwl(message, t).catch(console.error);
     } catch (err) {
       console.log(err);
     }
