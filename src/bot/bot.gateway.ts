@@ -43,22 +43,19 @@ export class BotGateway {
   async onMessage(message: Message): Promise<void> {
     try {
       const { client: t } = message;
-      const displayname =
-        message.member != null || message.member != undefined
-          ? message.member.displayName
-          : message.author.username;
+      const guild = await t.guilds.fetch(message.guildId);
+      const guildmember = await guild.members.fetch(message.author.id);
+      const displayname = guildmember.displayName || message.author.username;
 
-      if (message.id != null) {
-        this.extendersService.addDBMessage(null, message).catch(console.error);
+      if (message.id) {
+        await this.extendersService.addDBMessage(null, message);
       }
-      if (message.author != null) {
-        this.extendersService
-          .addDBUser(displayname, message)
-          .catch(console.error);
+      if (message.author) {
+        await this.extendersService.addDBUser(displayname, message);
       }
-      await this.bwlService.bwl(message, t).catch(console.error);
-    } catch (err) {
-      console.log(err);
+      await this.bwlService.bwl(message, t);
+    } catch (error) {
+      console.error(error);
     }
   }
 
