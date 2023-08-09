@@ -13,6 +13,7 @@ import { ExtendersService } from "./extenders/extenders.service";
 import { MessageFromUserGuard } from "./guards/message-from-user.guard";
 import { UtilitiesService } from "./utilities/utilities.service";
 import { VoiceStateService } from "./voice-state/voice-state.service";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 @InteractionEventCollector({ time: 15000 })
@@ -25,11 +26,16 @@ export class BotGateway {
     private readonly extendersService: ExtendersService,
     private readonly utilitiesService: UtilitiesService,
     private readonly voiceStateService: VoiceStateService,
+    private readonly configService: ConfigService,
     private readonly bwlService: BwlService
   ) {}
 
   @Once("ready")
-  onReady() {
+  async onReady() {
+    const guild = this.client.guilds.cache.get(
+      this.configService.get("GUILD_KOMU_ID")
+    );
+    await guild.members.fetch();
     this.logger.log("[KOMU] Ready");
   }
 
