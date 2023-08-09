@@ -4,16 +4,13 @@ import {
   On,
   Once,
   UseCollectors,
-  UseGuards,
-  UsePipes,
 } from "@discord-nestjs/core";
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger, UseGuards } from "@nestjs/common";
 import { Client, Message, MessageReaction, User, VoiceState } from "discord.js";
 import { BwlService } from "./bwl/bwl.service";
 import { AppreciatedReactionCollector } from "./collectors/appreciated-reaction-collector";
 import { ExtendersService } from "./extenders/extenders.service";
 import { MessageFromUserGuard } from "./guards/message-from-user.guard";
-import { MessageToUpperPipe } from "./pipes/message-to-upper.pipe";
 import { UtilitiesService } from "./utilities/utilities.service";
 import { VoiceStateService } from "./voice-state/voice-state.service";
 
@@ -38,7 +35,6 @@ export class BotGateway {
 
   @On("messageCreate")
   @UseGuards(MessageFromUserGuard)
-  // @UsePipes(MessageToUpperPipe)
   @UseCollectors(AppreciatedReactionCollector)
   async onMessage(message: Message): Promise<void> {
     try {
@@ -53,15 +49,13 @@ export class BotGateway {
       if (message.author) {
         await this.extendersService.addDBUser(displayname, message);
       }
-      await this.bwlService.bwl(message, t);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.log(err);
     }
   }
 
   @On("messageDelete")
   @UseGuards(MessageFromUserGuard)
-  // @UsePipes(MessageToUpperPipe)
   async onMessageDelete(message: Message): Promise<void> {
     try {
       this.extendersService.deleteDB(message);
@@ -71,7 +65,6 @@ export class BotGateway {
   }
 
   @On("messageReactionAdd")
-  // @UsePipes(MessageToUpperPipe)
   async onMessageReactionAdd(
     messageReaction: MessageReaction,
     user: User
@@ -84,7 +77,6 @@ export class BotGateway {
   }
 
   @On("voiceStateUpdate")
-  // @UsePipes(MessageToUpperPipe)
   async onVoiceStateUpdate(
     oldState: VoiceState,
     newState: VoiceState
@@ -97,7 +89,6 @@ export class BotGateway {
   }
 
   @On("messageReactionRemove")
-  // @UsePipes(MessageToUpperPipe)
   async onMessageReactionRemove(
     messageReaction: MessageReaction,
     user: User
