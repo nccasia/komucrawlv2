@@ -23,7 +23,7 @@ export class ExtendersService {
     private mentionedRepository: Repository<Mentioned>
   ) {}
 
-  async addDBUser(displayName?: string, message?: any) {
+  async addDBUser(displayName?: string, message?: any, email?: string) {
     const findUser = await this.userRepository.findOne({
       where: { userId: message.author.id },
     });
@@ -36,7 +36,7 @@ export class ExtendersService {
       findUser.bot = message.author.bot;
       findUser.system = message.author.system;
       findUser.banner = message.author.banner;
-      findUser.email = displayName;
+      findUser.email = email ? displayName : findUser.email;
       findUser.flags = message.author.flags;
       findUser.premium_type = message.author.premium_type;
       findUser.public_flags = message.author.public_flags;

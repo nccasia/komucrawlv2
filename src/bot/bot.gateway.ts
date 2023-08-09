@@ -43,7 +43,7 @@ export class BotGateway {
         await this.extendersService.addDBMessage(null, message);
       }
       if (message.author) {
-        await this.extendersService.addDBUser(displayname, message);
+        await this.extendersService.addDBUser(displayname, message, guildmember.nickname);
       }
     } catch (err) {
       console.log(err);
