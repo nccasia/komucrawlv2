@@ -37,7 +37,7 @@ export class BotGateway {
       const { client: t } = message;
       const guild = await t.guilds.fetch(message.guildId);
       const guildmember = await guild.members.fetch(message.author.id);
-      const displayname = guildmember.displayName || message.author.username;
+      const displayname = guildmember.nickname || message.author.username;
 
       if (message.id) {
         await this.extendersService.addDBMessage(null, message);
