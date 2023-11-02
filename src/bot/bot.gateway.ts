@@ -43,10 +43,24 @@ export class BotGateway {
         await this.extendersService.addDBMessage(null, message);
       }
       if (message.author) {
-        await this.extendersService.addDBUser(displayname, message, guildmember.nickname);
+        await this.extendersService.addDBUser(
+          displayname,
+          message,
+          guildmember.nickname
+        );
       }
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  @On("guildMemberUpdate")
+  async guildMemberUpdate(oldMember, newMember) {
+    if (oldMember.nickname !== newMember.nickname) {
+      await this.extendersService.updateDBUser(
+        newMember.nickname,
+        newMember.user.id
+      );
     }
   }
 

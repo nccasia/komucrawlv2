@@ -62,6 +62,18 @@ export class ExtendersService {
     await this.userRepository.insert(komuUser);
   }
 
+  async updateDBUser(displayName?: string, userId?: any) {
+    const findUser = await this.userRepository.findOne({
+      where: { userId: userId },
+    });
+
+    if (findUser) {
+      findUser.email = displayName ?? findUser.email;
+      await this.userRepository.save(findUser);
+      return;
+    }
+  }
+
   async deleteDB(message?: any) {
     await this.mentionedRepository.delete({ messageId: message.id });
   }
