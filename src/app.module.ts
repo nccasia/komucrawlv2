@@ -45,7 +45,7 @@ import { TX8 } from "./bot/entities/tx8.entity";
         database: configService.get("POSTGRES_DB"),
         // entities: [__dirname + '/../**/*.entity.ts'],
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: false,
       }),
     }),
     TypeOrmModule.forFeature([
